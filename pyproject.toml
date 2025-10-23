@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+lint.select = [
+    "E",    # PEP8 errors (из flake8)
+    "W",    # PEP8 warnings (из flake8)
+    "F",    # PyFlakes (из flake8)
+    "C90",  # McCabe complexity (из flake8)
+
+    "D",    # docstrings chechks
+    
+    # Pylint-equivalent rules:
+    "ARG",  # unused arguments
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "PIE",  # flake8-pie
+    "SIM",  # flake8-simplify
+    "RET",  # flake8-return
+]
+
+lint.pydocstyle.convention = "google"
+
+lint.ignore = [
+    "D200",  # One-line docstring should fit on one line
+    "D212",  # Multi-line docstring summary should start at the first line
+    "D205",  # 1 blank line required between summary line and description
+    "D415",  # First line should end with a period, question mark, or exclamation point
+    "SIM108", 
+]
+
+lint.pylint.max-args = 8  # Maximum number of function arguments
+lint.mccabe.max-complexity = 10
+
+# Naming conventions exceptions
+lint.pep8-naming.ignore-names = [
+    "CTR*",      # Click-Through Rate
+    "CVR*",      # Conversion Rate
+    "*CPC",      # CPC or eCPC
+    "*CPA",      # CPA or eCPA
+    "C",         # Cost constraint
+    "SEED",      # Random seed
+]
+
+# Less strict rules for Jupyter notebooks (data analysis code)
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = [
+    "D103",    # Missing docstring in function (notebooks are exploratory)
+]
+
+[tool.mypy]
+python_version = "3.12"
+disallow_untyped_defs = true
+warn_return_any = true
