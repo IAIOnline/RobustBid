@@ -47,7 +47,7 @@ def plot_results_with_std(nonrobust,robust,name):
         ax.errorbar(df_non_robust['epsilon'],
                    df_non_robust[f"{metric['name']}_mean"],
                    yerr=df_non_robust[f"{metric['name']}_std"],
-                   color='#E24A33',  # красный
+                   color='#E24A33',  # red
                    label='Non-robust',
                    fmt='o-',
                    capsize=4,
@@ -58,7 +58,7 @@ def plot_results_with_std(nonrobust,robust,name):
         ax.errorbar(df_robust['epsilon'],
                    df_robust[f"{metric['name']}_mean"],
                    yerr=df_robust[f"{metric['name']}_std"],
-                   color='#348ABD',  # синий
+                   color='#348ABD',  # blue
                    label='Robust',
                    fmt='s-',
                    capsize=4,
@@ -123,14 +123,14 @@ def plot_results_with_std_ctr_cvr(nonrobust, robust, _name_prefix):
     df_non_robust = pd.read_csv(nonrobust)
     df_robust = pd.read_csv(robust)
 
-    # Получаем все уникальные значения epsilon_CVR из объединения двух датафреймов
+    # Get all unique epsilon_CVR values from the union of both dataframes
     unique_epsilon_cvr = pd.concat([
         df_non_robust['epsilon_CVR'],
         df_robust['epsilon_CVR']
     ]).unique()
     unique_epsilon_cvr.sort()
 
-    # Метрики, которые нужно строить
+    # Metrics to plot
     metrics = [
         {
             'name': 'total_conversions',
@@ -145,7 +145,7 @@ def plot_results_with_std_ctr_cvr(nonrobust, robust, _name_prefix):
     ]
 
     for epsilon_cvr_val in unique_epsilon_cvr:
-        # Фильтруем данные по текущему epsilon_CVR
+        # Filter data by current epsilon_CVR
         df_non_robust_filtered = df_non_robust[df_non_robust['epsilon_CVR'] == epsilon_cvr_val]
         df_robust_filtered = df_robust[df_robust['epsilon_CVR'] == epsilon_cvr_val]
 
@@ -156,13 +156,13 @@ def plot_results_with_std_ctr_cvr(nonrobust, robust, _name_prefix):
         for idx, metric in enumerate(metrics):
             ax = fig.add_subplot(gs[idx])
 
-            # Проверяем, что есть данные для построения графика
+            # Check that there is data to plot
             if not df_non_robust_filtered.empty:
                 ax.errorbar(
                     df_non_robust_filtered['epsilon_CTR'],
                     df_non_robust_filtered[f"{metric['name']}_mean"],
                     yerr=df_non_robust_filtered[f"{metric['name']}_std"],
-                    color='#E24A33',  # красный
+                    color='#E24A33',  # red
                     label='Non-robust',
                     fmt='o-',
                     capsize=4,
@@ -176,7 +176,7 @@ def plot_results_with_std_ctr_cvr(nonrobust, robust, _name_prefix):
                     df_robust_filtered['epsilon_CTR'],
                     df_robust_filtered[f"{metric['name']}_mean"],
                     yerr=df_robust_filtered[f"{metric['name']}_std"],
-                    color='#348ABD',  # синий
+                    color='#348ABD',  # blue
                     label='Robust',
                     fmt='s-',
                     capsize=4,
@@ -245,7 +245,7 @@ def plot_3d_ctr_cvr(nonrobust_path, robust_path, name_prefix, el, az):
         y_r = df_robust['epsilon_CVR']
         z_r = df_robust[f'{metric["name"]}_mean']
 
-        # Определяем границы для осей
+        # Define axis bounds
         x_range = [5e-7, 2e-2]
         y_range = [5e-7, 2e-2]
         z_min = min(z_nr.min(), z_r.min())
@@ -254,7 +254,7 @@ def plot_3d_ctr_cvr(nonrobust_path, robust_path, name_prefix, el, az):
 
         fig = go.Figure()
 
-        # Добавляем неробастные точки
+        # Add non-robust points
         fig.add_trace(go.Scatter3d(
             x=x_nr, y=y_nr, z=z_nr,
             mode='markers',
@@ -262,7 +262,7 @@ def plot_3d_ctr_cvr(nonrobust_path, robust_path, name_prefix, el, az):
             name='Non-robust'
         ))
 
-        # Добавляем робастные точки
+        # Add robust points
         fig.add_trace(go.Scatter3d(
             x=x_r, y=y_r, z=z_r,
             mode='markers',
@@ -270,7 +270,7 @@ def plot_3d_ctr_cvr(nonrobust_path, robust_path, name_prefix, el, az):
             name='Robust'
         ))
 
-        # Устанавливаем параметры осей с логарифмическим масштабом для X и Y
+        # Set axis parameters with logarithmic scale for X and Y
         fig.update_layout(
             scene={
                 'xaxis': {
@@ -312,7 +312,7 @@ def plot_3d_ctr_cvr(nonrobust_path, robust_path, name_prefix, el, az):
             height=700
         )
 
-        # Сохраняем в файл html (интерактивный) и в png (статичный)
+        # Save to html (interactive) and png (static) files
         fig.write_html(f"{name_prefix}_{metric['name']}_3d_scatter.html")
         fig.write_image(f"{name_prefix}_{metric['name']}_3d_scatter.png", scale=2)
 
@@ -338,17 +338,17 @@ def plot_2d_heatmaps(nonrobust_path, robust_path, name_prefix):
     ]
 
     for metric in metrics:
-        # Данные non-robust
+        # Non-robust data
         x_nr = df_non_robust['epsilon_CTR']
         y_nr = df_non_robust['epsilon_CVR']
         z_nr = df_non_robust[f'{metric["name"]}_mean']
 
-        # Данные robust
+        # Robust data
         x_r = df_robust['epsilon_CTR']
         y_r = df_robust['epsilon_CVR']
         z_r = df_robust[f'{metric["name"]}_mean']
 
-        # Общий диапазон значений для нормализации цвета
+        # Common value range for color normalization
         z_all = np.concatenate([z_nr.values, z_r.values])
         z_min, z_max = np.nanmin(z_all), np.nanmax(z_all)
 
@@ -375,7 +375,7 @@ def plot_2d_heatmaps(nonrobust_path, robust_path, name_prefix):
         axs[1].set_ylabel('Uncertainty Parameter CVR (ε_CVR)')
         axs[1].set_title(f'Robust: {metric["title"]}')
 
-        # Общий colorbar справа
+        # Shared colorbar on the right
         cbar = fig.colorbar(sc1, ax=axs.ravel().tolist(), shrink=0.9)
         cbar.set_label(metric['zlabel'])
 
@@ -390,7 +390,7 @@ def plot_2d_heatmaps_interpolated(nonrobust_path, robust_path, name_prefix):
     df_non_robust = pd.read_csv(nonrobust_path)
     df_robust = pd.read_csv(robust_path)
 
-    # Создаём папку results, если её нет
+    # Create results directory if it doesn't exist
     os.makedirs('results', exist_ok=True)
 
     metrics = [
@@ -407,7 +407,7 @@ def plot_2d_heatmaps_interpolated(nonrobust_path, robust_path, name_prefix):
     ]
 
     for metric in metrics:
-        # Логарифмируем координаты
+        # Log-transform coordinates
         x_nr_log = np.log10(df_non_robust['epsilon_CTR'].values)
         y_nr_log = np.log10(df_non_robust['epsilon_CVR'].values)
         z_nr = df_non_robust[f'{metric["name"]}_mean'].values
@@ -416,7 +416,7 @@ def plot_2d_heatmaps_interpolated(nonrobust_path, robust_path, name_prefix):
         y_r_log = np.log10(df_robust['epsilon_CVR'].values)
         z_r = df_robust[f'{metric["name"]}_mean'].values
 
-        # Диапазоны для сетки в лог-пространстве
+        # Grid ranges in log-space
         x_min = min(np.min(x_nr_log), np.min(x_r_log))
         x_max = max(np.max(x_nr_log), np.max(x_r_log))
         y_min = min(np.min(y_nr_log), np.min(y_r_log))
@@ -426,29 +426,29 @@ def plot_2d_heatmaps_interpolated(nonrobust_path, robust_path, name_prefix):
         grid_y_log = np.linspace(y_min, y_max, 200)
         grid_x, grid_y = np.meshgrid(grid_x_log, grid_y_log)
 
-        # Интерполяция в лог-пространстве
+        # Interpolation in log-space
         points_nr = np.column_stack((x_nr_log, y_nr_log))
         grid_z_nr = griddata(points_nr, z_nr, (grid_x, grid_y), method='cubic')
 
         points_r = np.column_stack((x_r_log, y_r_log))
         grid_z_r = griddata(points_r, z_r, (grid_x, grid_y), method='cubic')
 
-        # Нормализация цвета по общему диапазону
+        # Color normalization over the common range
         z_all = np.concatenate([z_nr, z_r])
         norm = mcolors.Normalize(vmin=np.nanmin(z_all), vmax=np.nanmax(z_all))
         cmap = plt.get_cmap('plasma')
 
-        # Подписи осей — показываем значения в исходном масштабе (10^x)
+        # Axis labels — display values in original scale (10^x)
         def format_ticks(log_vals):
             """format_ticks."""
             return [f"{10**val:.1e}" for val in log_vals]
 
-        # Создаем две отдельные картинки с одинаковыми размерами
+        # Create two separate plots with identical dimensions
         for _idx, (grid_z, title, suffix) in enumerate([
             (grid_z_nr, 'NonRobustBid', 'nonrobust'),
             (grid_z_r, 'RobustBid (our)', 'robust')
         ]):
-            # Одинаковый размер для обоих графиков
+            # Same size for both plots
             fig, ax = plt.subplots(1, 1, figsize=(9, 9), constrained_layout=True)
 
             ax.imshow(grid_z,
@@ -461,7 +461,7 @@ def plot_2d_heatmaps_interpolated(nonrobust_path, robust_path, name_prefix):
             ax.set_xlabel(r'$\varepsilon_a$', fontsize=42)
             ax.set_ylabel(r'$\varepsilon_b$', fontsize=42)
 
-            # Настройка тиков на обеих осях
+            # Configure ticks on both axes
             ax.tick_params(
                 axis='both',
                 which='major',
@@ -472,7 +472,7 @@ def plot_2d_heatmaps_interpolated(nonrobust_path, robust_path, name_prefix):
                 direction='inout'
             )
 
-            # Тики на оси X
+            # X-axis ticks
             xticks_log = np.linspace(x_min, x_max, 4)
             ax.set_xticks(xticks_log)
             ax.set_xticklabels(
@@ -480,7 +480,7 @@ def plot_2d_heatmaps_interpolated(nonrobust_path, robust_path, name_prefix):
                 fontsize=26
             )
 
-            # Тики на оси Y
+            # Y-axis ticks
             yticks_log = np.linspace(y_min, y_max, 4)
             ax.set_yticks(yticks_log)
             ax.set_yticklabels(
@@ -494,11 +494,11 @@ def plot_2d_heatmaps_interpolated(nonrobust_path, robust_path, name_prefix):
             plt.show()
             plt.close()
 
-        # Создаем отдельную картинку только со шкалой
+        # Create a separate image with only the colorbar
         fig, ax = plt.subplots(1, 1, figsize=(2, 9))
-        ax.axis('off')  # Убираем оси
+        ax.axis('off')  # Hide axes
 
-        # Создаем только colorbar без изображения
+        # Create colorbar only, without an image
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
         sm.set_array([])
 
@@ -506,7 +506,7 @@ def plot_2d_heatmaps_interpolated(nonrobust_path, robust_path, name_prefix):
         cbar.set_label(metric['zlabel'], fontsize=48, labelpad=15)
         cbar.ax.tick_params(labelsize=24, width=2, length=6)
 
-        # Убираем левое поле, делаем colorbar на всю ширину
+        # Remove left margin, make colorbar full width
         cbar.ax.set_position([0, 0, 1, 1])
 
         plt.savefig(f"results/{metric['title']}_colorbar_"+name_prefix, dpi=300, bbox_inches='tight', pad_inches=0)
@@ -546,7 +546,7 @@ def plot_2d_heatmaps_interpolated_katya(data_path, name_prefix):
         y_r_log = np.log10(df_robust['eps_cvr'].values)
         z_r = df_robust[f'mean_{metric["name"]}'].values
 
-        # Диапазоны для сетки в лог-пространстве
+        # Grid ranges in log-space
         x_min = min(np.min(x_nr_log), np.min(x_r_log))
         x_max = max(np.max(x_nr_log), np.max(x_r_log))
         y_min = min(np.min(y_nr_log), np.min(y_r_log))
@@ -556,29 +556,29 @@ def plot_2d_heatmaps_interpolated_katya(data_path, name_prefix):
         grid_y_log = np.linspace(y_min, y_max, 200)
         grid_x, grid_y = np.meshgrid(grid_x_log, grid_y_log)
 
-        # Интерполяция в лог-пространстве
+        # Interpolation in log-space
         points_nr = np.column_stack((x_nr_log, y_nr_log))
         grid_z_nr = griddata(points_nr, z_nr, (grid_x, grid_y), method='cubic')
 
         points_r = np.column_stack((x_r_log, y_r_log))
         grid_z_r = griddata(points_r, z_r, (grid_x, grid_y), method='cubic')
 
-        # Нормализация цвета по общему диапазону
+        # Color normalization over the common range
         z_all = np.concatenate([z_nr, z_r])
         norm = mcolors.Normalize(vmin=np.nanmin(z_all), vmax=np.nanmax(z_all))
         cmap = plt.get_cmap('plasma')
 
-        # Подписи осей — показываем значения в исходном масштабе (10^x)
+        # Axis labels — display values in original scale (10^x)
         def format_ticks(log_vals):
             """format_ticks."""
             return [f"{10**val:.1e}" for val in log_vals]
 
-        # Создаем две отдельные картинки с одинаковыми размерами
+        # Create two separate plots with identical dimensions
         for _idx, (grid_z, title, suffix) in enumerate([
             (grid_z_nr, 'NonRobustBid', 'nonrobust'),
             (grid_z_r, 'RobustBid (our)', 'robust')
         ]):
-            # Одинаковый размер для обоих графиков
+            # Same size for both plots
             fig, ax = plt.subplots(1, 1, figsize=(9, 9), constrained_layout=True)
 
             ax.imshow(grid_z,
@@ -591,7 +591,7 @@ def plot_2d_heatmaps_interpolated_katya(data_path, name_prefix):
             ax.set_xlabel(r'$\varepsilon_a$', fontsize=42)
             ax.set_ylabel(r'$\varepsilon_b$', fontsize=42)
 
-            # Настройка тиков на обеих осях
+            # Configure ticks on both axes
             ax.tick_params(
                 axis='both',
                 which='major',
@@ -602,7 +602,7 @@ def plot_2d_heatmaps_interpolated_katya(data_path, name_prefix):
                 direction='inout'
             )
 
-            # Тики на оси X
+            # X-axis ticks
             xticks_log = np.linspace(x_min, x_max, 4)
             ax.set_xticks(xticks_log)
             ax.set_xticklabels(
@@ -610,7 +610,7 @@ def plot_2d_heatmaps_interpolated_katya(data_path, name_prefix):
                 fontsize=26
             )
 
-            # Тики на оси Y
+            # Y-axis ticks
             yticks_log = np.linspace(y_min, y_max, 4)
             ax.set_yticks(yticks_log)
             ax.set_yticklabels(
@@ -624,11 +624,11 @@ def plot_2d_heatmaps_interpolated_katya(data_path, name_prefix):
             plt.show()
             plt.close()
 
-        # Создаем отдельную картинку только со шкалой
+        # Create a separate image with only the colorbar
         fig, ax = plt.subplots(1, 1, figsize=(2, 9))
-        ax.axis('off')  # Убираем оси
+        ax.axis('off')  # Hide axes
 
-        # Создаем только colorbar без изображения
+        # Create colorbar only, without an image
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
         sm.set_array([])
 
@@ -636,7 +636,7 @@ def plot_2d_heatmaps_interpolated_katya(data_path, name_prefix):
         cbar.set_label(metric['zlabel'], fontsize=48, labelpad=15)
         cbar.ax.tick_params(labelsize=24, width=2, length=6)
 
-        # Убираем левое поле, делаем colorbar на всю ширину
+        # Remove left margin, make colorbar full width
         cbar.ax.set_position([0, 0, 1, 1])
 
         plt.savefig(f"results/{metric['title']}_colorbar_"+name_prefix, dpi=300, bbox_inches='tight', pad_inches=0)

@@ -1,5 +1,5 @@
 # Robust autobidding for noisy conversion prediction models.
-Code for anonimyzed submission on NeurIPS.
+Official implementation of code for the AAMAS 2026 paper "Robust autobidding for noisy conversion prediction models"
 
 This repository contains code for running experiments comparing robust and non-robust autobidding approaches across three different setups: synthetic data, IPinYou dataset, and BAT.
 The BAT experiment implementation builds upon the original [BAT autobidding benchmark](https://github.com/avito-tech/bat-autobidding-benchmark/)

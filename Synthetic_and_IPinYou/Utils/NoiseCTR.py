@@ -39,7 +39,7 @@ def noise_CTR_mae(I, T, CTR_real, epsilon, SEED, CTRmin, CTRmax):
     return CTR_noised
 
 
-def noise_CTR_сe(I, T, epsilon, SEED, CTRmin, CTRmax, N_iterations):
+def noise_CTR_ce(I, T, epsilon, SEED, CTRmin, CTRmax, N_iterations):
     def binary_crossentropy(ctr_real, ctr_noised):
 
         ctr_real = np.clip(ctr_real, 1e-7, 1-1e-7)

@@ -7,10 +7,10 @@ line-length = 120
 target-version = "py312"
 
 lint.select = [
-    "E",    # PEP8 errors (из flake8)
-    "W",    # PEP8 warnings (из flake8)
-    "F",    # PyFlakes (из flake8)
-    "C90",  # McCabe complexity (из flake8)
+    "E",    # PEP8 errors (from flake8)
+    "W",    # PEP8 warnings (from flake8)
+    "F",    # PyFlakes (from flake8)
+    "C90",  # McCabe complexity (from flake8)
 
     "D",    # docstrings chechks
     

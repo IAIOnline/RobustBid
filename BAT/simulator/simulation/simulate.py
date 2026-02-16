@@ -149,7 +149,7 @@ def simulate_campaign(
         )
         bidder_spend = simulation_result.spent
         bidder_clicks = simulation_result.clicks
-        if campaign_ctr and bidder_clicks:  # скипаем стартовый шаг
+        if campaign_ctr and bidder_clicks:  # skip the initial step
             cur_cpc = (bidder_spend / bidder_clicks) / campaign_ctr
             cpc_list.append(cur_cpc)
 
